@@ -10,6 +10,7 @@ import numpy as np  # pip install dash (version 2.0.0 or higher)
 import plotly.io as pio
 pio.renderers.default='browser'
 app = dash.Dash(__name__, external_stylesheets = [dbc.themes.CYBORG])
+server = app.server
 #app = dash.Dash(__name__, external_stylesheets = [dbc.themes.FLATLY])
 
 colors = {
