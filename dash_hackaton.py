@@ -116,21 +116,91 @@ app.layout = html.Div([
     ]),
         html.Br(),
         html.Br(),
+        html.Br(),
+        dbc.Row([
+    html.Div(html.Hr(style={'borderWidth': "0.3vh", "width": "100%", "color": "##7FDBFF"}))
+]),
+        html.Br(),
+        html.Br(),
+        html.Br(),
         html.Div(id='none',children=[],style={'display': 'none'}),
+        html.Div(id='cont_sex2'), 
+        dcc.Checklist(                      
+            id = 'lst_sex2',
+            options=[
+                {'label' : "Homme", 'value' : 1},
+                {'label' : 'Femme', 'value' : 0}],
+            style={'color': '#7FDBFF' , 'font-size': 20},
+            inputStyle={"margin-right": "5px", "margin-left": "10px"},
+            value=[0,1]),
+        
+        html.Br(),
+        html.Div(id='cont_cat2'), 
+        dcc.Checklist(                      
+            id = 'lst_cat2',
+            options=[
+                {'label' : '15-20', 'value' : '15-20 ans'},
+                {'label' : '21-25', 'value' : '21-25 ans'},
+                {'label' : '26-30', 'value' : '26-30 ans'},
+                {'label' : '31-35', 'value' : '31-35 ans'},
+                {'label' : '36-40', 'value' : '36-40 ans'},
+                {'label' : '41-45', 'value' : '41-45 ans'},
+                {'label' : '46-50', 'value' : '46-50 ans'},
+                {'label' : '51-55', 'value' : '51-55 ans'}],
+            value=['15-20 ans', '21-25 ans', '26-30 ans', '31-35 ans','36-40 ans','41-45 ans', '46-50 ans','51-55 ans'],
+            style={'color': '#7FDBFF' , 'font-size': 20},
+            inputStyle={"margin-right": "5px", "margin-left": "10px"},
+            ),
+        
+        html.Br(),
+        html.Div(id='cont_lieu2'), 
+        dcc.Checklist(                      
+            id = 'lst_lieu2',
+            options=[
+                {'label' : 'périphérie de Strasbourg', 'value' : 'aux alentours de Strasbourg'},
+                {'label' : 'Alsace', 'value' : 'en Alsace'},
+                {'label' : 'France', 'value' : 'en France'},
+                {'label' : 'Strasbourg', 'value' : 'à Strasbourg'},
+                {'label' : 'pays étrangers', 'value' : "à l'étranger"}],
+            value=['aux alentours de Strasbourg', 'en Alsace', 'en France', "à Strasbourg","à l'étranger",'41-45 ans', '46-50 ans','51-55 ans'],
+            style={'color': '#7FDBFF' , 'font-size': 20},
+            inputStyle={"margin-right": "5px", "margin-left": "10px"},
+            ),
+        
+        html.Br(),
+        html.Div(id='cont_role2'), 
+        dcc.Dropdown(
+            id = 'lst_role',
+            options =[
+                {'label' : 'autre', 'value' : 'autre'},
+                {'label' : 'bénévole', 'value' : 'bénévole'},
+                {'label' : 'coach', 'value' : 'coach'},
+                {'label' : 'consommateur', 'value' : 'consommateur'},
+                {'label' : 'designer', 'value' : 'designer'},
+                {'label' : 'hacker', 'value' : 'hacker'},
+                {'label' : 'organisateur', 'value' : 'organisateur'},
+                {'label' : 'partenaire', 'value' : 'partenaire'},
+                {'label' : "professionnel de l'industrie", 'value' : "professionnel de l'industrie"},
+                {'label' : 'professionnel de santé ', 'value' : 'professionnel de santé '},
+                ],
+            value=['organisateur', 'partenaire', "professionnel de l'industrie", 'professionnel de santé', 'autre', 'bénévole', 'coach', 'consommateur', 'designer', 'hacker'],
+            multi=True
+            ),
+        
+        
+        html.Br(),
             # dcc.Graph(id='graphi')
         # html.Div(className= 'row', children=[
         #     html.H4("Moyennes"),
         #     html.Br(),
         #     px.pie(df, labels=['Femme','Homme'], values = pd.Series(df.index, index=df['GENRE']).groupby(level=0).size().tolist() 
                    
-        
         html.Div(className= 'row', children=[
              html.Div(children=[
         #         dcc.Graph(px.pie(df, labels=['Oxygen','Hydrogen','Carbon_Dioxide','Nitrogen'], values = [4500,2500,1053,500])),
                  dcc.Graph(id="graphi", style={'display': 'inline-block'}),
                  dcc.Graph(id="grapho", style={'display': 'inline-block'}),
 ]),
-             
              html.Div(children=[
                  
                  dcc.Graph(id="grapha", style={'display': 'inline-block'}),
@@ -139,6 +209,15 @@ app.layout = html.Div([
              ,])])
 
 
+# dfff = df.copy()
+# lst_cat2 = ['26-30 ans', '36-40 ans']
+# dfff = dfff.sort_values(by='Je suis.1')
+# dfff
+# dfff = dfff[dfff["Je vis"].isin(lst_cat2)]
+# dfff['Je suis.1'].unique().tolist()
+# pd.Series(dfff.index, index=dfff['Je suis.1']).groupby(level=0).size()
+
+print('hello')
 #______________________________________________________________________________________
 # variables dans les graph
 @app.callback(
@@ -181,28 +260,51 @@ def update_graph(lst_qst, lst_sex, lst_cat, slider_note):
 
     return container, container2, container3, container4, fig
 
-
-
 #______________________________________________________________________________________
 
 @app.callback(
-    [Output(component_id='graphi', component_property='figure'),
+    [
+    Output(component_id='cont_sex2', component_property='children'),
+    Output(component_id='cont_cat2', component_property='children'),
+    Output(component_id='cont_lieu2', component_property='children'),
+    Output(component_id='cont_role2', component_property='children'),
+    Output(component_id='graphi', component_property='figure'),
     Output(component_id='grapho', component_property='figure'),
     Output(component_id='grapha', component_property='figure'),
-    Output(component_id='graphe', component_property='figure')],
-    Input(component_id='none', component_property='children'),)
+    Output(component_id='graphe', component_property='figure'),
+    ],
+    [
+     Input(component_id='lst_sex2', component_property='value'),
+     Input(component_id='lst_cat2', component_property='value'),
+     Input(component_id='lst_lieu2', component_property='value'),
+     Input(component_id='lst_role', component_property='value')
+     ])
 
 
 
 
-def jsplus(none):
+def jsplus(lst_sex2, lst_cat2, lst_lieu2, lst_role):
 
-    truci = pd.Series(df.index, index=df['GENRE']).groupby(level=0).size().tolist() 
-    truco = pd.Series(df.index, index=df['AGE']).groupby(level=0).size().tolist() 
-    truca = pd.Series(df.index, index=df['Je vis']).groupby(level=0).size().tolist() 
-    truce = pd.Series(df.index, index=df['Je suis.1']).groupby(level=0).size().tolist() 
+
+    dfff = df.copy()
+    dfff = dfff[dfff["GENRE"].isin(lst_sex2)]
+    dfff = dfff[dfff["AGE"].isin(lst_cat2)]
+    dfff = dfff[dfff["Je vis"].isin(lst_lieu2)]
+    dfff = dfff[dfff["Je suis.1"].isin(lst_role)]
     
-    figi = go.Figure(data=[go.Pie(labels=['Femme','Homme'], 
+    dfff = dfff.sort_values(by='GENRE')
+    truci = pd.Series(dfff.index, index=dfff['GENRE']).groupby(level=0).size().tolist()
+    label_truci = dfff['GENRE'].unique().tolist()
+    
+    cont_sex2 = "Selectionnez le sexe des participants"
+    cont_cat2 = "Selectionnez les tranches d'âge des participants"
+    cont_lieu2 = "Selectionnez le lieu de résidence des participants"
+    cont_role2 = "Selectionnez le rôle des participants"
+    
+    
+    
+    
+    figi = go.Figure(data=[go.Pie(labels=label_truci, 
                                   values = truci,
                                   hole=.4)])
     figi.update_layout(
@@ -212,7 +314,10 @@ def jsplus(none):
             font_color=colors['text']
             )
     
-    figo = go.Figure(data=[go.Pie(labels=['15-20','21-25','26-30','31-35','36-40','41-45', '46-50', '51-55'], 
+    dfff = dfff.sort_values(by='AGE')
+    truco = pd.Series(dfff.index, index=dfff['AGE']).groupby(level=0).size().tolist()
+    label_truco = dfff['AGE'].unique().tolist()     
+    figo = go.Figure(data=[go.Pie(labels=label_truco, 
                                   values = truco,
                                   hole=.4)])
     figo.update_layout(
@@ -222,8 +327,10 @@ def jsplus(none):
             font_color=colors['text']
             )
 
-  
-    figa = go.Figure(data=[go.Pie(labels=['périphérie de Strasbourg','Alsace', 'France', 'Strasbourg', 'pays étrangers'], 
+    dfff = dfff.sort_values(by='Je vis')
+    truca = pd.Series(dfff.index, index=dfff['Je vis']).groupby(level=0).size().tolist() 
+    label_truco = dfff['Je vis'].unique().tolist() 
+    figa = go.Figure(data=[go.Pie(labels=label_truco, 
                                   values = truca,
                                   hole=.4)])
     figa.update_layout(
@@ -233,7 +340,10 @@ def jsplus(none):
             font_color=colors['text']
             )
 
-    fige = go.Figure(data=[go.Pie(labels=['autre','bénévole', 'coach','consommateur','designer','hacker','organisateur','partenaire',"professionnel de l'industrie",'professionnel de santé'], 
+    dfff = dfff.sort_values(by='Je suis.1')    
+    truce = pd.Series(dfff.index, index=dfff['Je suis.1']).groupby(level=0).size().tolist()  
+    label_truce = dfff['Je suis.1'].unique().tolist()
+    fige = go.Figure(data=[go.Pie(labels=label_truce, 
                                   values = truce, 
                                   hole=.4)])
     fige.update_layout(
@@ -243,7 +353,7 @@ def jsplus(none):
             font_color=colors['text']
             )
      
-    return  figi, figo, figa, fige
+    return  cont_sex2, cont_cat2, cont_lieu2, cont_role2, figi, figo, figa, fige
 
 
 # ------------------------------------------------------------------------------
